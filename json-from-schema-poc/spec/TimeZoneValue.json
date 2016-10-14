@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "TimeZoneValue.json",
+    "title": "TimeZoneValue",
+    "description": "Contains a time-zone and its validity period.",
+    "type": "object",
+    "javaType": "com.ericsson.bss.cpi.entity.TimeZoneValue",
+    "additionalProperties": false,
+    "properties": {
+        "timeZone": {
+            "type": "string",
+            "description": "The name of the Time Zone according to IANA Time Zone database. Example: \"Europe/Paris\".",
+            "enum-reference": "TimeZone"
+        },
+        "validFor": {
+            "$ref": "TimePeriod.json#"
+        }
+    },
+    "required": [
+        "timeZone"
+    ]
+}

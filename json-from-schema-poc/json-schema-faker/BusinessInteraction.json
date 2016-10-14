@@ -1,0 +1,183 @@
+{
+	"$schema" : "http://json-schema.org/draft-04/schema#",
+	"id" : "BusinessInteraction.json",
+	"title" : "BusinessInteraction",
+	"description" : "A BusinessInteraction is an arrangement, contract, or communication between one or more Business Participants. A BusinessInteraction may consist of one or more BusinessInteractionItems. A BusinessInteractionItem may refer to a Product, Service, Resource, or one of their specifications. A BusinessInteraction is further defined by one or more Locations. One BusinessInteraction may reference another BusinessInteraction and one BusinessInteractionItem may reference another BusinessInteractionItem on the same or different BusinessInteraction. Types of BusinessInteractions are: Requests, Responses, Notifications, and Agreements.",
+	"type" : "object",
+	"javaType" : "com.ericsson.bss.cpi.entity.BusinessInteraction",
+	"additionalProperties" : false,
+	"properties" : {
+		"id" : {
+			"$ref" : "Id.json#"
+		},
+		"href" : {
+			"$ref" : "Href.json#"
+		},
+		"externalId" : {
+			"$ref" : "ExternalId.json#"
+		},
+		"description" : {
+			"type" : "string",
+			"description" : "A description of this Business Interaction"
+		},
+		"createdBy" : {
+			"type" : "string",
+			"system-generated" : true,
+			"description" : "The user who created this Business Interaction"
+		},
+		"createdDate" : {
+			"type" : "string",
+			"system-generated" : true,
+			"format" : "date-time",
+			"description" : "The date when this Business Interaction was created"
+		},
+		"updatedBy" : {
+			"type" : "string",
+			"system-generated" : true,
+			"description" : "The user who last updated this Business Interaction"
+		},
+		"lastUpdatedDate" : {
+			"type" : "string",
+			"system-generated" : true,
+			"format" : "date-time",
+			"description" : "The date when this Business Interaction was last updated"
+		},
+		"interactionDate" : {
+			"type" : "string",
+			"system-generated" : true,
+			"format" : "date-time",
+			"description" : "The date when this Business Interaction was executed (submitted for execution)"
+		},
+		"interactionDateComplete" : {
+			"type" : "string",
+			"system-generated" : true,
+			"format" : "date-time",
+			"description" : "The date when this Business Interaction was completed"
+		},
+		"interactionStatus" : {
+			"type" : "string",
+			"pattern" : "^OPEN\\.|^CLOSED\\.",
+			"system-generated" : true,
+			"description" : "Represents the status of this Business Interaction. Valid states alwasys start with \"OPEN\" or \"CLOSED\"."
+		},
+		"interactionType" : {
+			"type" : "string",
+			"description" : "The type of this Business Interaction as defined by the SID model.",
+			"enum" : [
+				"Request",
+				"Response",
+				"Notification",
+				"Agreement"
+			]
+		},
+		"interactionSubType" : {
+			"type" : "string",
+			"description" : "The sub-type of this Business Interaction as defined by the specification(schema) on which this Business Interaction instance is based on.",
+			"system-defaults" : true,
+			"enum" : [
+				"CustomerManagement",
+				"PartyManagement",
+				"SubscriptionManagement",
+				"Others"
+			]
+		},
+		"requestedStartDate" : {
+			"type" : "string",
+			"format" : "date-time",
+			"description" : "Expected date by which this Business Interactions should start executing"
+		},
+		"requestedCompletionDate" : {
+			"type" : "string",
+			"format" : "date-time",
+			"description" : "Expected date by which this Business Interactions should be completed"
+		},
+		"versionNumber" : {
+			"type" : "string",
+			"description" : "The version number identifer for this entity. It is equal to the UTC creation timestamp of this version. Currenty not supported.",
+			"system-generated" : true
+		},
+		"validFor" : {
+			"$ref" : "TimePeriod.json#"
+		},
+		"biSpecificationRef" : {
+			"type" : "string",
+			"format" : "uri",
+			"description" : "Reference to the specification(schema) on which this Business Interaction instance is based on. It must be expressed as URI."
+		},
+		"biContextParameters" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of name value pairs as context parameters. The nature and meanings for each context parameter is implementation and business logic dependent. The specification(schema) should provide details for supported context paramters if any.",
+			"items" : {
+				"$ref" : "MapElement.json#"
+			}
+		},
+		"characteristics" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of name value pairs as characteristics. The nature and meanings for each characteristic is implementation and business logic dependent. The specification(schema) should provide details for supported characteristics if any.",
+			"items" : {
+				"$ref" : "MapElement.json#"
+			}
+		},
+		"notes" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of Notes",
+			"items" : {
+				"$ref" : "Note.json#"
+			}
+		},
+		"biItems" : {
+			"type" : "array",
+			"description" : "The array of Business Interaction Items for this Business Interaction. The schema for each item is provided in the Business Interaction Specification controlling this Business Interaction.",
+			"items" : {
+				"$ref" : "BusinessInteractionItem.json#"
+			}
+		},
+		"relatedBusinessInteractions" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of associations. Each association holds the reference to the Business Interaction related to this Business Interaction and its role in the association",
+			"items" : {
+				"$ref" : "EntityAssociation.json#"
+			}
+		},
+		"relatedPartyInteractionRoles" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of references to Party or Party Roles playing a unique role in relation to this Business Interaction.",
+			"items" : {
+				"$ref" : "EntityAssociation.json#"
+			}
+		},
+		"relatedCustomerAccountInteractionRoles" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of references to Customer Accounts playing a unique role in relation to this Business Interaction.",
+			"items" : {
+				"$ref" : "EntityAssociation.json#"
+			}
+		},
+		"relatedLocations" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of associations. Each association holds the reference to the Location related to this Business Interaction, and its role in the association",
+			"items" : {
+				"$ref" : "EntityAssociation.json#"
+			}
+		},
+		"attachments" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"description" : "An array of attachment references associated with this Business Interaction",
+			"items" : {
+				"$ref" : "Attachment.json#"
+			}
+		}
+	},
+	"required" : [
+		"interactionType",
+		"biSpecificationRef"
+	]
+}

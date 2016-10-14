@@ -1,0 +1,674 @@
+{
+	"$schema" : "http://json-schema.org/draft-04/schema#",
+	"id" : "UpdateCustomerBI-1.0.0.spec",
+	"title" : "UpdateCustomerBI-1.0.0",
+	"description" : "This Business Interaction represents a request to update a customer.",
+	"allOf" : [{
+			"$ref" : "BusinessInteraction"
+		}, {
+			"properties" : {
+				"interactionType" : {
+					"type" : "string",
+					"enum" : [
+						"Request"
+					]
+				},
+				"biSpecificationRef" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "Reference to the specification(schema) on which this Business Interaction instance is based on. It must be expressed as URI.",
+					"enum" : [
+						"/cpi/schemas/UpdateCustomerBI-1.0.0.spec"
+					]
+				},
+				"biItems" : {
+					"type" : "array",
+					"minItems" : 1,
+					"maxItems" : 1,
+					"description" : "The array of Customer Business Interaction Item for this Customer Update",
+					"items" : {
+						"$ref" : "#/definitions/UpdateCustomerBIItem"
+					}
+				},
+				"relatedPartyInteractionRoles" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"minItems" : 1,
+					"maxItems" : 1,
+					"description" : "An array of Party Interaction Roles which associates a single Customer with this Update Customer Business Interaction.",
+					"items" : {
+						"$ref" : "#/definitions/CustomerInteractionRole"
+					}
+				}
+			},
+			"required" : [
+				"relatedPartyInteractionRoles",
+				"biItems"
+			]
+		}
+	],
+	"definitions" : {
+		"TimezoneValue" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "TimeZoneValue.json",
+			"title" : "TimeZoneValue",
+			"description" : "Contains a time-zone and its validity period.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.TimeZoneValue",
+			"additionalProperties" : false,
+			"properties" : {
+				"timeZone" : {
+					"type" : "string",
+					"description" : "The name of the Time Zone according to IANA Time Zone database. Example: \"Europe/Paris\".",
+					"enum-reference" : "TimeZone"
+				},
+				"validFor" : {
+					"$ref" : "TimePeriod"
+				}
+			},
+			"required" : [
+				"timeZone"
+			]
+		},
+		"Attachment" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "Attachment.json",
+			"title" : "Attachment",
+			"description" : "References an Document mastered by a Documentation Management System.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.Attachment",
+			"additionalProperties" : false,
+			"properties" : {
+				"attachmentId" : {
+					"$ref" : "ExternalId"
+				},
+				"type" : {
+					"type" : "string",
+					"description" : "An optional qualifier for this attachment. Examples: Contract, Image, Identification"
+				},
+				"uri" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "URI referencing the attachment"
+				},
+				"description" : {
+					"description" : "Name or title",
+					"type" : "string"
+				}
+			},
+			"required" : [
+				"attachmentId",
+				"uri"
+			]
+		},
+		"BusinessInteraction" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "BusinessInteraction.json",
+			"title" : "BusinessInteraction",
+			"description" : "A BusinessInteraction is an arrangement, contract, or communication between one or more Business Participants. A BusinessInteraction may consist of one or more BusinessInteractionItems. A BusinessInteractionItem may refer to a Product, Service, Resource, or one of their specifications. A BusinessInteraction is further defined by one or more Locations. One BusinessInteraction may reference another BusinessInteraction and one BusinessInteractionItem may reference another BusinessInteractionItem on the same or different BusinessInteraction. Types of BusinessInteractions are: Requests, Responses, Notifications, and Agreements.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.BusinessInteraction",
+			"additionalProperties" : false,
+			"properties" : {
+				"id" : {
+					"$ref" : "Id"
+				},
+				"href" : {
+					"$ref" : "Href"
+				},
+				"externalId" : {
+					"$ref" : "ExternalId"
+				},
+				"description" : {
+					"type" : "string",
+					"description" : "A description of this Business Interaction"
+				},
+				"createdBy" : {
+					"type" : "string",
+					"system-generated" : true,
+					"description" : "The user who created this Business Interaction"
+				},
+				"createdDate" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was created"
+				},
+				"updatedBy" : {
+					"type" : "string",
+					"system-generated" : true,
+					"description" : "The user who last updated this Business Interaction"
+				},
+				"lastUpdatedDate" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was last updated"
+				},
+				"interactionDate" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was executed (submitted for execution)"
+				},
+				"interactionDateComplete" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was completed"
+				},
+				"interactionStatus" : {
+					"type" : "string",
+					"pattern" : "^OPEN\\.|^CLOSED\\.",
+					"system-generated" : true,
+					"description" : "Represents the status of this Business Interaction. Valid states alwasys start with \"OPEN\" or \"CLOSED\"."
+				},
+				"interactionType" : {
+					"type" : "string",
+					"description" : "The type of this Business Interaction as defined by the SID model.",
+					"enum" : [
+						"Request",
+						"Response",
+						"Notification",
+						"Agreement"
+					]
+				},
+				"interactionSubType" : {
+					"type" : "string",
+					"description" : "The sub-type of this Business Interaction as defined by the specification(schema) on which this Business Interaction instance is based on.",
+					"system-defaults" : true,
+					"enum" : [
+						"CustomerManagement",
+						"PartyManagement",
+						"SubscriptionManagement",
+						"Others"
+					]
+				},
+				"requestedStartDate" : {
+					"type" : "string",
+					"format" : "date-time",
+					"description" : "Expected date by which this Business Interactions should start executing"
+				},
+				"requestedCompletionDate" : {
+					"type" : "string",
+					"format" : "date-time",
+					"description" : "Expected date by which this Business Interactions should be completed"
+				},
+				"versionNumber" : {
+					"type" : "string",
+					"description" : "The version number identifer for this entity. It is equal to the UTC creation timestamp of this version. Currenty not supported.",
+					"system-generated" : true
+				},
+				"validFor" : {
+					"$ref" : "TimePeriod"
+				},
+				"biSpecificationRef" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "Reference to the specification(schema) on which this Business Interaction instance is based on. It must be expressed as URI."
+				},
+				"biContextParameters" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of name value pairs as context parameters. The nature and meanings for each context parameter is implementation and business logic dependent. The specification(schema) should provide details for supported context paramters if any.",
+					"items" : {
+						"$ref" : "MapElement"
+					}
+				},
+				"characteristics" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of name value pairs as characteristics. The nature and meanings for each characteristic is implementation and business logic dependent. The specification(schema) should provide details for supported characteristics if any.",
+					"items" : {
+						"$ref" : "MapElement"
+					}
+				},
+				"notes" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of Notes",
+					"items" : {
+						"$ref" : "Note"
+					}
+				},
+				"biItems" : {
+					"type" : "array",
+					"description" : "The array of Business Interaction Items for this Business Interaction. The schema for each item is provided in the Business Interaction Specification controlling this Business Interaction.",
+					"items" : {
+						"$ref" : "BusinessInteractionItem"
+					}
+				},
+				"relatedBusinessInteractions" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of associations. Each association holds the reference to the Business Interaction related to this Business Interaction and its role in the association",
+					"items" : {
+						"$ref" : "EntityAssociation"
+					}
+				},
+				"relatedPartyInteractionRoles" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of references to Party or Party Roles playing a unique role in relation to this Business Interaction.",
+					"items" : {
+						"$ref" : "EntityAssociation"
+					}
+				},
+				"relatedCustomerAccountInteractionRoles" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of references to Customer Accounts playing a unique role in relation to this Business Interaction.",
+					"items" : {
+						"$ref" : "EntityAssociation"
+					}
+				},
+				"relatedLocations" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of associations. Each association holds the reference to the Location related to this Business Interaction, and its role in the association",
+					"items" : {
+						"$ref" : "EntityAssociation"
+					}
+				},
+				"attachments" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of attachment references associated with this Business Interaction",
+					"items" : {
+						"$ref" : "Attachment"
+					}
+				}
+			},
+			"required" : [
+				"interactionType",
+				"biSpecificationRef"
+			]
+		},
+		"EntityAssociation" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "EntityAssociation.json",
+			"title" : "EntityAssociation",
+			"description" : "An association type referencing an entity related to a given entity playing a specified role for this association.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.EntityAssociation",
+			"additionalProperties" : false,
+			"properties" : {
+				"associationId" : {
+					"$ref" : "ExternalId"
+				},
+				"role" : {
+					"type" : "string",
+					"description" : "The role played by the referenced entity in relation to the given entity."
+				},
+				"entitySpecificationRef" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "Reference to the specification(schema) describing the entity refered to by entityRef. It must be expressed as URI."
+				},
+				"entityRef" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "Reference to the entity related to the given entity."
+				}
+			},
+			"required" : [
+				"role",
+				"entitySpecificationRef",
+				"entityRef"
+			]
+		},
+		"ExternalId" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "ExternalId.json",
+			"title" : "ExternalId",
+			"description" : "A unique identifier for the entity in an external system or application. The usage of this type is two-fold: It can act as an identifier which is used via a translation table to point to the system-generated identifier or it can act as a client specified unique identifier for a given entity and subsequently used to identify the entity when it is nested within another entity.",
+			"type" : "string"
+		},
+		"Href" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "Href.json",
+			"title" : "Href",
+			"description" : "URI for the given entity. This is a system-generated URI for a given entity. Using this the entity can be separately addressed over Hypermedia.",
+			"type" : "string",
+			"format" : "uri",
+			"system-generated" : true
+		},
+		"LocalAssociation" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "LocalAssociation.json",
+			"title" : "LocalAssociation",
+			"description" : "An association type referencing an entity related to a given entity playing a specified role for this association. Both the entities are local to a given Containing Entity. For example: Business Interaction Items within a Business Interaction.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.LocalAssociation",
+			"additionalProperties" : false,
+			"properties" : {
+				"id" : {
+					"$ref" : "Id"
+				},
+				"href" : {
+					"$ref" : "Href"
+				},
+				"role" : {
+					"type" : "string",
+					"description" : "The role played by the referenced entity in relation to the given entity."
+				}
+			},
+			"required" : [
+				"id",
+				"role"
+			]
+		},
+		"BusinessInteractionItem" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "BusinessInteractionItem.json",
+			"title" : "BusinessInteractionItem",
+			"description" : "A Business Interaction Item expresses the purpose of the Business Interaction in terms of an involved entity which is the focus of this interaction. It also associates the involved entity with the specific Interaction Role, Interaction Place and other items related to the Business Interaction.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.BusinessInteractionItem",
+			"additionalProperties" : false,
+			"properties" : {
+				"id" : {
+					"$ref" : "Id"
+				},
+				"href" : {
+					"$ref" : "Href"
+				},
+				"description" : {
+					"type" : "string",
+					"description" : "A description of this Business Interaction"
+				},
+				"createdBy" : {
+					"type" : "string",
+					"system-generated" : true,
+					"description" : "The user who created this Business Interaction"
+				},
+				"createdDate" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was created"
+				},
+				"updatedBy" : {
+					"type" : "string",
+					"system-generated" : true,
+					"description" : "The user who last updated this Business Interaction"
+				},
+				"lastUpdatedDate" : {
+					"type" : "string",
+					"system-generated" : true,
+					"format" : "date-time",
+					"description" : "The date when this Business Interaction was last updated"
+				},
+				"biItemSpecificationRef" : {
+					"type" : "string",
+					"format" : "uri",
+					"description" : "Reference to the specification(schema) which this Business Interaction Item instance is based on. It must be expressed as URI."
+				},
+				"action" : {
+					"type" : "string",
+					"description" : "Specifices the action to be performed on the Involved Entity. Examples: Add, Modify, Delete, Inquiry."
+				},
+				"characteristics" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of name value pairs as characteristics",
+					"items" : {
+						"$ref" : "MapElement"
+					}
+				},
+				"notes" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of Notes",
+					"items" : {
+						"$ref" : "Note"
+					}
+				},
+				"involvedEntity" : {
+					"type" : "object",
+					"additionalProperties" : false,
+					"description" : "This object represents the Involved Business Entity.",
+					"properties" : {
+						"entitySpecificationRef" : {
+							"type" : "string",
+							"format" : "uri",
+							"description" : "Reference to the specification(schema) describing the Entity contained herein as the property named entity. It must be expressed as URI."
+						},
+						"entity" : {
+							"description" : "The Involved Entity object. Allowed types are controlled by the Business Interaction Item Specification."
+						}
+					},
+					"required" : [
+						"entitySpecificationRef",
+						"entity"
+					]
+				},
+				"relatedBiItems" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of associations. Each association holds the reference to the Business Interaction Item related to this Item and the role it plays in this association.",
+					"items" : {
+						"$ref" : "LocalAssociation"
+					}
+				},
+				"involvedLocations" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of identifiers which refer to Locations defined at the Business Interaction level as relatedInteractionLocations.",
+					"items" : {
+						"$ref" : "ExternalId"
+					}
+				},
+				"involvedPartyInteractionRoles" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of identifiers which refer to Interaction Roles defined at the Business Interaction level as partyInteractionRoles.",
+					"items" : {
+						"$ref" : "ExternalId"
+					}
+				},
+				"involvedCustomerAccountInteractionRoles" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of identifiers which refer to Interaction Roles defined at the Business Interaction level as customerAccountInteractionRoles.",
+					"items" : {
+						"$ref" : "ExternalId"
+					}
+				},
+				"attachments" : {
+					"type" : "array",
+					"uniqueItems" : true,
+					"description" : "An array of identifers which refer to Attachments defined at the Business Interaction level as attachments.",
+					"items" : {
+						"$ref" : "ExternalId"
+					}
+				}
+			},
+			"required" : [
+				"biItemSpecificationRef",
+				"action"
+			]
+		},
+		"Node" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "Note.json",
+			"title" : "Note",
+			"description" : "A note capturing administrative information about a given entity",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.Note",
+			"additionalProperties" : false,
+			"properties" : {
+				"text" : {
+					"type" : "string",
+					"description" : "Textual content of this note"
+				},
+				"author" : {
+					"type" : "string",
+					"system-generated" : true,
+					"description" : "The author of this note"
+				},
+				"date" : {
+					"type" : "string",
+					"format" : "date-time",
+					"system-generated" : true,
+					"description" : "The date when this note was created"
+				}
+			},
+			"required" : [
+				"text"
+			]
+		},
+		"Id" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "Id.json",
+			"title" : "Id",
+			"description" : "Uniquely identifies a given entity. Although this is system generated, in certain situations, it can be specified as temporary id when creating several entities as part of a single request and one entity needs to refer to another within the same request. After the entities are created, temporary ids are replaced with system generated ones. When specifying temporary ids, it is recommended that a prefix such as \"tmp\" be used, for example: \"tmp0001\".",
+			"type" : "string",
+			"system-generated" : true
+		},
+		"MapElement" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "MapElement.json",
+			"title" : "MapElement",
+			"description" : "A object consisting of a name as the key and a value. If applicable, it can also indicate a purpose and a unique id for reference.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.MapElement",
+			"additionalProperties" : false,
+			"properties" : {
+				"id" : {
+					"$ref" : "ExternalId"
+				},
+				"purpose" : {
+					"type" : "string",
+					"description" : "The purpose of this named value"
+				},
+				"name" : {
+					"type" : "string",
+					"description" : "The name associated with value in this pair"
+				},
+				"value" : {
+					"description" : "The value associated with the name. Can be of any type"
+				}
+			},
+			"required" : [
+				"name",
+				"value"
+			]
+		},
+		"TimePeriod" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "TimePeriod.json",
+			"title" : "TimePeriod",
+			"description" : "Captures the start and end date for a given period of time.",
+			"type" : "object",
+			"javaType" : "com.ericsson.bss.cpi.entity.TimePeriod",
+			"additionalProperties" : false,
+			"properties" : {
+				"start" : {
+					"type" : "string",
+					"format" : "date-time",
+					"description" : "Start of the time period",
+					"system-defaults" : true
+				},
+				"end" : {
+					"type" : "string",
+					"format" : "date-time",
+					"description" : "End of the time period",
+					"system-defaults" : true
+				}
+			},
+			"required" : [
+				"start"
+			]
+		},
+		"CustomerInteractionRole" : {
+			"allOf" : [{
+					"$ref" : "EntityAssociation"
+				}, {
+					"properties" : {
+						"entitySpecificationRef" : {
+							"type" : "string",
+							"format" : "uri",
+							"description" : "Reference to the specification(schema) describing the entity referred to by entityRef. It must be expressed as URI.",
+							"enum" : [
+								"/cpi/schemas/Customer.json"
+							]
+						}
+					},
+					"entityRef" : {
+						"type" : "string",
+						"format" : "uri",
+						"description" : "Reference to the entity related to the given entity.",
+						"pattern" : "(\/cpi\/holisticView\/v\\d+\/customer\/)(\\w+)"
+					}
+				}
+			]
+		},
+		"UpdateCustomerBIItem" : {
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"id" : "UpdateCustomerBIItem-1.0.0.spec",
+			"title" : "UpdateCustomerBIItem-1.0.0",
+			"description" : "A type of Business Interaction Item that represents values to be updated in a Customer.",
+			"allOf" : [{
+					"$ref" : "BusinessInteractionItem"
+				}, {
+					"properties" : {
+						"biItemSpecificationRef" : {
+							"type" : "string",
+							"format" : "uri",
+							"description" : "Reference to the specification(schema) on which this Business Interaction Item instance is based on. It must be expressed as URI.",
+							"enum" : [
+								"/cpi/schemas/UpdateCustomerBIItem-1.0.0.spec"
+							]
+						},
+						"action" : {
+							"type" : "string",
+							"description" : "Specifies the action to be performed on the Involved Entity. Examples: Add, Modify, Delete, Inquiry.",
+							"enum" : [
+								"Update"
+							]
+						},
+						"involvedEntity" : {
+							"type" : "object",
+							"additionalProperties" : false,
+							"description" : "This object represents the Involved Business Entity.",
+							"properties" : {
+								"entitySpecificationRef" : {
+									"type" : "string",
+									"format" : "uri",
+									"description" : "Reference to the specification(schema) describing the Entity contained here as the property named entity. It must be expressed as URI.",
+									"enum" : [
+										"#/definitions/CustomerUpdateInformation"
+									]
+								},
+								"entity" : {
+									"$ref" : "#/definitions/CustomerUpdateInformation"
+								}
+							}
+						}
+					},
+					"required" : [
+						"involvedEntity"
+					]
+				}
+			],
+			"definitions" : {
+				"CustomerUpdateInformation" : {
+					"type" : "object",
+					"additionalProperties" : false,
+					"properties" : {
+						"homeTimeZones" : {
+							"type" : "array",
+							"uniqueItems" : true,
+							"description" : "An array of applicable Time Zones for this Customer.",
+							"items" : {
+								"$ref" : "TimeZoneValue"
+							}
+						}
+					},
+					"minProperties" : 1
+				}
+			}
+		}
+	}
+}

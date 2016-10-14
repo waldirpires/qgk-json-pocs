@@ -1,0 +1,8 @@
+var dummyjson = require('dummy-json');
+
+var template = '{\
+    "name": {{firstName}},\
+    "age": {{int 18 65}}\
+  }';
+
+var result = dummyjson.parse(template); // Returns a string 
