@@ -1,0 +1,40 @@
+{
+    "interactionType": "Request",
+    "biSpecificationRef": "/cpi/schemas/AcquireIndividualPartyBI-1.0.0.spec",
+    "biItems": [
+        {
+            "description": "Optional description",
+            "biItemSpecificationRef": "/cpi/schemas/PartyBIItem-1.0.0.spec",
+            "action": "Add",
+            "involvedEntity": {
+                "entitySpecificationRef": "/cpi/schemas/Party.json",
+                "entity": {
+                    "partySpecificationRef": "Party.json",
+                    "type": "individual",
+                    "aliveDuring": {
+                        "birthDate": "{{date '2010-01-01T00:00' '2012-01-01T00:00' 'YYYY-MM-DDTHH:mm:ss.sss+ZZ'}}",
+                        "deathDate": "{{date '2012-01-01T00:00' '2016-01-01T00:00' 'YYYY-MM-DDTHH:mm:ss.sss+ZZ'}}"
+                    }
+                }
+            },
+            "notes": [
+                {
+                    "text": "{{lorem 30}}"
+                },
+                {
+                    "text": "{{lorem 32}}"
+                }
+            ],
+            "characteristics": [
+                {
+                    "name": "{{lorem 10}}",
+                    "value": "{{lorem 5}}"
+                },
+                {
+                    "name": "{{lorem 11}}",
+                    "value": "{{lorem 4}}"
+                }
+            ]
+        }
+    ]
+}

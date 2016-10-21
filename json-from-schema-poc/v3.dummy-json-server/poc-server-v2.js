@@ -1,3 +1,9 @@
+// poc-server-v2
+
+// 1) Creates an HTTP server
+// 2) Receives request from client containing JSON template
+// 3) Responds a dummy JSON payload based on the template informed
+
 var http = require('http');
 var dummyjson = require('dummy-json');
 

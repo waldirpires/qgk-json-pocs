@@ -1,0 +1,23 @@
+/c/code/projects/qgk-json-pocs/json-from-schema-poc/v4.ref-validate-dummy
+
+wrpires@bhz01wrpires MINGW64 /c/code/projects/qgk-json-pocs/json-from-schema-poc/v4.ref-validate-dummy (master)
+$ node json-schema-faker-demo-v4.js AcquireIndividualPartyBI-1.0.0.spec
+
+Folder:
+/c/code/projects/qgk-json-pocs/json-from-schema-poc/v4.ref-validate-dummy
+
+POC 1:
+node poc-server-v4.js dummy-template-create-party.json AcquireIndividualPartyBI-1.0.0.spec
+
+/c/code/projects/qgk-json-pocs/json-from-schema-poc/v3.dummy-json-server
+POC 2:
+node poc-server-v2.js
+POSTMAN: 
+
+POC 3:
+node json-schema-faker-demo-v4.js AcquireIndividualPartyBI-1.0.0.spec
+
+/c/code/projects/qgk-json-pocs/json-from-schema-poc/v4.ref-validate-dummy
+POC 4:
+ node json-from-schema-demo-v1.js Service.json
+
